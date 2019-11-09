@@ -1,0 +1,76 @@
+<?php
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+* Implements hook_entity_base_field_info().
+*/
+function node_trash_entity_base_field_info(EntityTypeInterface $entity_type) {
+$fields = array();
+
+if ($entity_type->id() === 'node') {
+  $fields['trash'] = BaseFieldDefinition::create('boolean')
+  ->setLabel(t('Trash'))
+  ->setDescription(t('Define node delete status'))
+  ->setRevisionable(TRUE)
+  ->setTranslatable(TRUE)->setDisplayConfigurable('form', TRUE);
+
+}
+
+return $fields;
+}
+
+
+/**
+ * Implements hook_form_alter().
+ */
+function node_trash_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+  if ($form_state->getBuildInfo()['base_form_id'] != 'node_form') {
+    return;
+  }
+  $node = $form_state->getFormObject()->getEntity();
+
+  if ($node->id() && !isset($node->trash->value)) {
+    $form['actions']['delete']['#access'] = FALSE;
+    $options = [
+      'attributes' => [
+        'class' => ['button ', 'button--danger'],
+      ],
+    ];
+    $url = Url::fromRoute('node_trash.form', ['node' => $node->id()], $options);
+    $link = [
+      '#type' => 'link',
+      '#url' => $url,
+      '#title' => t('Trash'),
+      '#weight' => 100,
+    ];
+
+    $form['actions']['trash'] = $link;
+
+  }
+
+}
+
+/**
+ * @param EntityInterface $entity
+ */
+
+function node_trash_entity_operation_alter(array &$operations, EntityInterface $entity) {
+    if (!isset($entity->trash->value) && $entity->getEntityTypeId() == 'node') {
+      unset($operations['delete']);
+      $operations['trash'] = [
+        'title' => t('Trash'),
+        'url' => Url::fromRoute('node_trash.form', ['node' => $entity->id()]),
+        'weight' => 50,
+      ];
+      return $operations;
+    }
+}
+
+
+

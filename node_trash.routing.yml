@@ -1,0 +1,8 @@
+node_trash.form:
+  path: '/node/{node}/trash'
+  defaults:
+    _form: '\Drupal\node_trash\Form\NodeTrashConfirm'
+    _title: 'Node soft Delete'
+  requirements:
+    _permission: 'soft node delete access'
+    node: \d+
