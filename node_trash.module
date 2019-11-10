@@ -30,7 +30,7 @@ return $fields;
  */
 function node_trash_form_alter(&$form, FormStateInterface $form_state, $form_id)
 {
-  if ($form_state->getBuildInfo()['base_form_id'] != 'node_form') {
+  if (isset($form_state->getBuildInfo()['base_form_id'])  && $form_state->getBuildInfo()['base_form_id'] != 'node_form') {
     return;
   }
   $node = $form_state->getFormObject()->getEntity();
