@@ -21,3 +21,4 @@ function node_trash_uninstall() {
   $field_storage_manager->onFieldStorageDefinitionDelete($definition);
 
 }
+
