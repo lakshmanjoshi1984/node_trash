@@ -1,28 +1,10 @@
 <?php
 
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityInterface;
 
-/**
-* Implements hook_entity_base_field_info().
-*/
-function node_trash_entity_base_field_info(EntityTypeInterface $entity_type) {
-$fields = array();
 
-if ($entity_type->id() === 'node') {
-  $fields['trash'] = BaseFieldDefinition::create('boolean')
-  ->setLabel(t('Trash'))
-  ->setDescription(t('Define node delete status'))
-  ->setRevisionable(TRUE)
-  ->setTranslatable(TRUE)->setDisplayConfigurable('form', TRUE);
-
-}
-
-return $fields;
-}
 
 
 /**

@@ -3,7 +3,3 @@ services:
     class: Drupal\node_trash\EventSubscriber\NodeTrashEventSubscriber
     tags:
       - { name: event_subscriber }
-  example.route_subscriber:
-    class: Drupal\node_trash\Routing\RouteSubscriber
-    tags:
-        - { name: event_subscriber }
